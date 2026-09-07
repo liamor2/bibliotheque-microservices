@@ -1,0 +1,2 @@
+package com.formation.loan.client; import com.formation.loan.dto.BookDto; import org.springframework.cloud.openfeign.FeignClient; import org.springframework.web.bind.annotation.*;
+@FeignClient(name="book-service",configuration=BookClientConfig.class) public interface BookClient { @GetMapping("/api/books/{id}") BookDto findById(@PathVariable Long id); @PatchMapping("/api/books/{id}/decrement-stock") BookDto decrement(@PathVariable Long id); @PatchMapping("/api/books/{id}/increment-stock") BookDto increment(@PathVariable Long id); }

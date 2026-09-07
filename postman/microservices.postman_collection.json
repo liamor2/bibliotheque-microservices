@@ -1,0 +1,150 @@
+{
+  "info": {
+    "name": "Architecture microservices — Module 10 bibliothèque",
+    "description": "Cycles de vie Book Service et Loan Service via l'API Gateway.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "productId", "value": "" },
+    { "key": "orderId", "value": "" },
+    { "key": "bookId", "value": "1" },
+    { "key": "loanId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Créer un produit",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Produit Postman\",\n  \"description\": \"Produit de test\",\n  \"price\": 25.50,\n  \"quantity\": 10\n}" },
+            "url": "{{baseUrl}}/api/products"
+          },
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Création produit : 201', () => pm.response.to.have.status(201));",
+            "const body = pm.response.json();",
+            "pm.expect(body.name).to.eql('Produit Postman');",
+            "pm.collectionVariables.set('productId', body.id);"
+          ] } }]
+        },
+        {
+          "name": "Lister les produits",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/products" },
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Liste produit : 200', () => pm.response.to.have.status(200));",
+            "pm.expect(pm.response.json()).to.be.an('array');"
+          ] } }]
+        },
+        {
+          "name": "Consulter le produit",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/products/{{productId}}" },
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Détail produit : 200', () => pm.response.to.have.status(200));",
+            "pm.expect(pm.response.json().id).to.eql(Number(pm.collectionVariables.get('productId')));"
+          ] } }]
+        },
+        {
+          "name": "Modifier le produit",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Produit Postman Pro\",\n  \"description\": \"Produit modifié\",\n  \"price\": 30.00,\n  \"quantity\": 8\n}" },
+            "url": "{{baseUrl}}/api/products/{{productId}}"
+          },
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Modification produit : 200', () => pm.response.to.have.status(200));",
+            "pm.expect(pm.response.json().name).to.eql('Produit Postman Pro');"
+          ] } }]
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Créer une commande",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"customerName\": \"Client Postman\",\n  \"items\": [{ \"productId\": {{productId}}, \"quantity\": 2 }]\n}" },
+            "url": "{{baseUrl}}/api/orders"
+          },
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Création commande : 201', () => pm.response.to.have.status(201));",
+            "const body = pm.response.json();",
+            "pm.expect(body.status).to.eql('CREATED');",
+            "pm.collectionVariables.set('orderId', body.id);"
+          ] } }]
+        },
+        {
+          "name": "Consulter la commande",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/orders/{{orderId}}" },
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Détail commande : 200', () => pm.response.to.have.status(200));",
+            "pm.expect(pm.response.json().customerName).to.eql('Client Postman');"
+          ] } }]
+        },
+        {
+          "name": "Confirmer la commande",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{ \"status\": \"CONFIRMED\" }" },
+            "url": "{{baseUrl}}/api/orders/{{orderId}}/status"
+          },
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Confirmation commande : 200', () => pm.response.to.have.status(200));",
+            "pm.expect(pm.response.json().status).to.eql('CONFIRMED');"
+          ] } }]
+        },
+        {
+          "name": "Supprimer la commande",
+          "request": { "method": "DELETE", "url": "{{baseUrl}}/api/orders/{{orderId}}" },
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Suppression commande : 204', () => pm.response.to.have.status(204));"
+          ] } }]
+        },
+        {
+          "name": "Supprimer le produit",
+          "request": { "method": "DELETE", "url": "{{baseUrl}}/api/products/{{productId}}" },
+          "event": [{ "listen": "test", "script": { "exec": [
+            "pm.test('Suppression produit : 204', () => pm.response.to.have.status(204));"
+          ] } }]
+        }
+      ]
+    },
+    {
+      "name": "Bibliothèque",
+      "item": [
+        {
+          "name": "Créer un livre",
+          "request": { "method": "POST", "header": [{"key":"Content-Type","value":"application/json"}], "body": {"mode":"raw","raw":"{\n  \"title\": \"Dune\",\n  \"author\": \"Frank Herbert\",\n  \"isbn\": \"9780441013593\",\n  \"totalCopies\": 2\n}"}, "url": "{{baseUrl}}/api/books" },
+          "event": [{"listen":"test","script":{"exec":["pm.test('Création livre : 201', () => pm.response.to.have.status(201));","pm.collectionVariables.set('bookId', pm.response.json().id);"]}}]
+        },
+        {
+          "name": "Créer un emprunt",
+          "request": { "method": "POST", "header": [{"key":"Content-Type","value":"application/json"}], "body": {"mode":"raw","raw":"{\n  \"memberName\": \"Bob\",\n  \"bookId\": {{bookId}}\n}"}, "url": "{{baseUrl}}/api/loans" },
+          "event": [{"listen":"test","script":{"exec":["pm.test('Création emprunt : 201', () => pm.response.to.have.status(201));","pm.collectionVariables.set('loanId', pm.response.json().id);"]}}]
+        },
+        {
+          "name": "Stock épuisé",
+          "request": { "method": "POST", "header": [{"key":"Content-Type","value":"application/json"}], "body": {"mode":"raw","raw":"{\"memberName\":\"Alice\",\"bookId\":3}"}, "url": "{{baseUrl}}/api/loans" },
+          "event": [{"listen":"test","script":{"exec":["pm.test('Stock épuisé : 409', () => pm.response.to.have.status(409));"]}}]
+        },
+        {
+          "name": "Retourner un emprunt",
+          "request": { "method": "PATCH", "url": "{{baseUrl}}/api/loans/{{loanId}}/return" },
+          "event": [{"listen":"test","script":{"exec":["pm.test('Retour : 200', () => pm.response.to.have.status(200));"]}}]
+        },
+        {
+          "name": "Double retour",
+          "request": { "method": "PATCH", "url": "{{baseUrl}}/api/loans/{{loanId}}/return" },
+          "event": [{"listen":"test","script":{"exec":["pm.test('Double retour : 409', () => pm.response.to.have.status(409));"]}}]
+        }
+      ]
+    }
+  ]
+}

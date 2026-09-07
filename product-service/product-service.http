@@ -1,0 +1,52 @@
+### Lister les produits
+GET http://localhost:8081/api/products
+Accept: application/json
+
+### Créer un produit
+POST http://localhost:8081/api/products
+Content-Type: application/json
+
+{
+  "name": "Casque audio",
+  "description": "Casque Bluetooth à réduction de bruit",
+  "price": 149.90,
+  "quantity": 15
+}
+
+> {% client.global.set("productId", response.body.id); %}
+
+### Consulter le produit créé
+GET http://localhost:8081/api/products/{{productId}}
+Accept: application/json
+
+### Modifier le produit créé
+PUT http://localhost:8081/api/products/{{productId}}
+Content-Type: application/json
+
+{
+  "name": "Casque audio Pro",
+  "description": "Casque Bluetooth avec réduction de bruit active",
+  "price": 179.90,
+  "quantity": 10
+}
+
+### Tester la validation
+POST http://localhost:8081/api/products
+Content-Type: application/json
+
+{
+  "name": "",
+  "price": -1,
+  "quantity": -2
+}
+
+### Tester une ressource absente
+GET http://localhost:8081/api/products/999999
+Accept: application/json
+
+### Supprimer le produit créé
+DELETE http://localhost:8081/api/products/{{productId}}
+
+### Vérifier la suppression
+GET http://localhost:8081/api/products/{{productId}}
+Accept: application/json

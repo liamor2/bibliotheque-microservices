@@ -1,0 +1,3 @@
+### Récupérer la configuration effective de product-service
+GET http://localhost:8888/product-service/default
+Accept: application/json

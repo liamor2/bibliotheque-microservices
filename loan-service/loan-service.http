@@ -1,0 +1,22 @@
+@baseUrl = http://localhost:8080
+
+### Emprunt réussi
+POST {{baseUrl}}/api/loans
+Content-Type: application/json
+
+{"memberName":"Bob","bookId":1}
+
+### Stock épuisé (bookId=3 en profil demo)
+POST {{baseUrl}}/api/loans
+Content-Type: application/json
+
+{"memberName":"Alice","bookId":3}
+
+### Retour
+PATCH {{baseUrl}}/api/loans/1/return
+
+### Deuxième retour : 409
+PATCH {{baseUrl}}/api/loans/1/return
+
+### Soft delete d'un prêt retourné
+DELETE {{baseUrl}}/api/loans/1

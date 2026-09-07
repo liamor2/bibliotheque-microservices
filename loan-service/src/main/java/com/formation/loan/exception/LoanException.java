@@ -1,0 +1,1 @@
+package com.formation.loan.exception; public class LoanException extends RuntimeException {private final int status; public LoanException(int status,String message){super(message);this.status=status;} public int getStatus(){return status;}}

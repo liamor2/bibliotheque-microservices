@@ -1,0 +1,16 @@
+@baseUrl = http://localhost:8080
+
+### Livres
+GET {{baseUrl}}/api/books?page=0&size=20
+
+### Créer un livre
+POST {{baseUrl}}/api/books
+Content-Type: application/json
+
+{"title":"Dune","author":"Frank Herbert","isbn":"9780441013593","totalCopies":2}
+
+### Décrément défensif
+PATCH {{baseUrl}}/api/books/1/decrement-stock
+
+### Incrément
+PATCH {{baseUrl}}/api/books/1/increment-stock

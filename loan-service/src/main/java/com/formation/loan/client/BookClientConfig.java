@@ -1,0 +1,1 @@
+package com.formation.loan.client; import feign.Request; import org.springframework.context.annotation.Bean; public class BookClientConfig { @Bean Request.Options requestOptions(){return new Request.Options(1500,3000); } }
