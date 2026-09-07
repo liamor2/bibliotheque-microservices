@@ -1,0 +1,1 @@
+package com.formation.loan.exception; import java.time.Instant; import java.util.Map; public record ApiError(Instant timestamp,int status,String error,String message,Map<String,String> fieldErrors){public ApiError(int s,String e,String m){this(Instant.now(),s,e,m,Map.of());}public ApiError(int s,String e,String m,Map<String,String> f){this(Instant.now(),s,e,m,f);}}
