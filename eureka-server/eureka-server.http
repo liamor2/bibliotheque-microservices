@@ -1,0 +1,6 @@
+### Vérifier la santé du serveur
+GET http://localhost:8761/actuator/health
+
+### Lister les applications enregistrées
+GET http://localhost:8761/eureka/apps
+Accept: application/json

@@ -1,0 +1,39 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: product-service
+          uri: lb://product-service
+          predicates:
+            - Path=/api/products/**
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            - Path=/api/orders/**
+        - id: book-service
+          uri: lb://book-service
+          predicates:
+            - Path=/api/books/**
+        - id: loan-service
+          uri: lb://loan-service
+          predicates:
+            - Path=/api/loans/**
+        - id: book-swagger
+          uri: lb://book-service
+          predicates:
+            - Path=/docs/books/**
+          filters:
+            - StripPrefix=2
+        - id: loan-swagger
+          uri: lb://loan-service
+          predicates:
+            - Path=/docs/loans/**
+          filters:
+            - StripPrefix=2
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
