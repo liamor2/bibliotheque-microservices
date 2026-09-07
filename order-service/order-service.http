@@ -1,0 +1,43 @@
+### Créer une commande valide
+POST http://localhost:8082/api/orders
+Content-Type: application/json
+
+{
+  "customerName": "Alice Martin",
+  "items": [
+    { "productId": 1, "quantity": 2 },
+    { "productId": 2, "quantity": 1 }
+  ]
+}
+
+> {% client.global.set("orderId", response.body.id); %}
+
+### Consulter la commande
+GET http://localhost:8082/api/orders/{{orderId}}
+Accept: application/json
+
+### Confirmer la commande
+PATCH http://localhost:8082/api/orders/{{orderId}}/status
+Content-Type: application/json
+
+{
+  "status": "CONFIRMED"
+}
+
+### Tester un produit inexistant
+POST http://localhost:8082/api/orders
+Content-Type: application/json
+
+{
+  "customerName": "Bob Dupont",
+  "items": [
+    { "productId": 999999, "quantity": 1 }
+  ]
+}
+
+### Supprimer la commande
+DELETE http://localhost:8082/api/orders/{{orderId}}
+
+### Vérifier la suppression
+GET http://localhost:8082/api/orders/{{orderId}}
+Accept: application/json
