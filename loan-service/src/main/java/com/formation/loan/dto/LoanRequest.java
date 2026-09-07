@@ -1,0 +1,1 @@
+package com.formation.loan.dto; import jakarta.validation.constraints.NotBlank; import jakarta.validation.constraints.NotNull; public record LoanRequest(@NotBlank String memberName,@NotNull Long bookId){}
