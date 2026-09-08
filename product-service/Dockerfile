@@ -1,5 +1,5 @@
 # Étape de construction
-FROM maven:3.9-eclipse-temurin-21 AS build
+FROM maven:3-eclipse-temurin-25 AS build
 WORKDIR /workspace
 
 COPY pom.xml .
@@ -15,7 +15,7 @@ COPY product-service/src product-service/src
 RUN mvn -q -pl product-service -am package -DskipTests
 
 # Étape d'exécution
-FROM eclipse-temurin:21-jre-jammy
+FROM eclipse-temurin:25-jre-ubi10-minimal
 WORKDIR /app
 COPY --from=build /workspace/product-service/target/product-service-*.jar app.jar
 

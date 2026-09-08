@@ -1,5 +1,5 @@
 # Étape de construction
-FROM maven:3.9-eclipse-temurin-21 AS build
+FROM maven:3-eclipse-temurin-25 AS build
 WORKDIR /workspace
 
 COPY pom.xml .
@@ -15,7 +15,7 @@ COPY eureka-server/src eureka-server/src
 RUN mvn -q -pl eureka-server -am package -DskipTests
 
 # Étape d'exécution
-FROM eclipse-temurin:21-jre-jammy
+FROM eclipse-temurin:25-jre-ubi10-minimal
 WORKDIR /app
 COPY --from=build /workspace/eureka-server/target/eureka-server-*.jar app.jar
 

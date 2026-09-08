@@ -1,4 +1,4 @@
-FROM maven:3.9-eclipse-temurin-21 AS build
+FROM maven:3-eclipse-temurin-25 AS build
 WORKDIR /workspace
 COPY pom.xml .
 COPY eureka-server/pom.xml eureka-server/pom.xml
@@ -10,7 +10,7 @@ COPY book-service/pom.xml book-service/pom.xml
 COPY loan-service/pom.xml loan-service/pom.xml
 COPY loan-service/src loan-service/src
 RUN mvn -q -pl loan-service -am package -DskipTests
-FROM eclipse-temurin:21-jre-jammy
+FROM eclipse-temurin:25-jre-ubi10-minimal
 WORKDIR /app
 COPY --from=build /workspace/loan-service/target/loan-service-*.jar app.jar
 EXPOSE 8092

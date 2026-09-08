@@ -1,5 +1,5 @@
 # Étape de construction
-FROM maven:3.9-eclipse-temurin-21 AS build
+FROM maven:3-eclipse-temurin-25 AS build
 WORKDIR /workspace
 
 COPY pom.xml .
@@ -15,7 +15,7 @@ COPY config-server/src config-server/src
 RUN mvn -q -pl config-server -am package -DskipTests
 
 # Étape d'exécution
-FROM eclipse-temurin:21-jre-jammy
+FROM eclipse-temurin:25-jre-ubi10-minimal
 WORKDIR /app
 COPY --from=build /workspace/config-server/target/config-server-*.jar app.jar
 COPY config-server/config-repo config-repo
